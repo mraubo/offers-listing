@@ -1,0 +1,5476 @@
+"""
+MZN API universe
+"""
+type Query {
+  """
+  Return a single Location object by ID
+  """
+  getLocation(
+    """
+    An ID of the location
+    """
+    id: String!
+  ): Location
+
+  """
+  Return a single Property object by ID
+  """
+  getProperty(
+    """
+    An ID (id or idOnFrontend) of the property
+    """
+    id: String!
+  ): Property
+
+  """
+  Returns a list of properties based on search parameters
+  """
+  searchProperties(
+    """
+    Object for input of property search filters
+    """
+    searchFilters: PropertySearchFiltersInput!
+
+    """
+    Input object holding information on how to sort search results
+    """
+    searchOrder: PropertySearchOrder
+
+    """
+    Max number of results per page
+    """
+    numberOfResults: Int
+
+    """
+    Page number
+    """
+    pageNumber: Int
+  ): PropertySearchResult
+}
+
+"""
+Location object representing administrative location
+"""
+type Location {
+  """
+  An ID of the location
+  """
+  id: String
+
+  """
+  An ID of the parent of the location
+  """
+  parentId: String
+
+  """
+  An ID of the location type
+  """
+  type: LocationType
+
+  """
+  Name of the location
+  """
+  name: String
+
+  """
+  Full administrative name of the location
+  """
+  nameFull: [String]
+
+  """
+  Name of the location in locative form
+  """
+  nameLocCase: String
+
+  """
+  Unique name of the location
+  """
+  uniqueName: String
+
+  """
+  Unique URL parts for creation of meaningful URL query
+  """
+  uniqueUrlParts: [String]
+
+  """
+  A set of map coordinates and zoom level for the center of location
+  """
+  map: Map
+
+  """
+  A set of map coordinates and zoom level for the center of location
+  """
+  googleMap: GoogleMap
+    @deprecated(
+      reason: "GoogleMap object is changed to Map object. Use `map` field instead."
+    )
+
+  """
+  Coordinates of the corners for the map area covered by location
+  """
+  mapBounds: MapBounds
+
+  """
+  A two letter code of the country the location belongs to
+  """
+  countryCode: CountryCode
+
+  """
+  Amount of children locations (not descendants)
+  """
+  numberOfChildren: Int
+
+  """
+  Is a default location of his parent
+  """
+  isDefault: Boolean
+
+  """
+  Package with number of properties by type
+  """
+  numberOfProperties: LocationNumberOfProperties
+
+  """
+  Return true if location is supported by Lendi, false otherwise
+  """
+  isSupportedByLendi: Boolean
+
+  """
+  Location ancestors list
+  """
+  ancestors(
+    """
+    If true, then current location will be included in ancestors list. Default `false`.
+    """
+    includeCurrent: Boolean
+  ): [Location]
+}
+
+"""
+Location type
+"""
+enum LocationType {
+  """
+  Abroad
+  """
+  ABROAD
+
+  """
+  Country
+  """
+  COUNTRY
+
+  """
+  Province
+  """
+  PROVINCE
+
+  """
+  District
+  """
+  DISTRICT
+
+  """
+  City
+  """
+  CITY
+
+  """
+  Urban community
+  """
+  URBAN_COMMUNITY
+
+  """
+  Rural community
+  """
+  RURAL_COMMUNITY
+
+  """
+  Urban/Rural community
+  """
+  URBAN_RURAL_COMMUNITY
+
+  """
+  Town
+  """
+  TOWN
+
+  """
+  Quarter
+  """
+  QUARTER
+
+  """
+  Area
+  """
+  AREA
+
+  """
+  Other community
+  """
+  OTHER_COMMUNITY
+
+  """
+  Other quarter
+  """
+  OTHER_QUARTER
+
+  """
+  Foreign region
+  """
+  FOREIGN_REGION
+
+  """
+  USA state
+  """
+  USA_STATE
+
+  """
+  Foreign town
+  """
+  FOREIGN_TOWN
+
+  """
+  Foreign subregion
+  """
+  FOREIGN_SUBREGION
+
+  """
+  Street
+  """
+  STREET
+}
+
+"""
+A set of map coordinates and zoom level for the center of location
+"""
+type Map {
+  """
+  Map coordinates
+  """
+  center: Coordinate
+
+  """
+  Map zoom level
+  """
+  zoom: Int
+}
+
+"""
+Map coordinates
+"""
+type Coordinate {
+  """
+  Latitude value of the map coordinate
+  """
+  latitude: Float
+
+  """
+  Longitude value of the map coordinate
+  """
+  longitude: Float
+}
+
+"""
+DEPRECATED - use Map object instead.
+"""
+type GoogleMap {
+  """
+  Map coordinates
+  """
+  coordinate: Coordinate
+    @deprecated(
+      reason: "GoogleMap object type is deprecated - use Map object instead"
+    )
+
+  """
+  Map zoom level
+  """
+  zoom: Int
+    @deprecated(
+      reason: "GoogleMap object type is deprecated - use Map object instead"
+    )
+}
+
+"""
+Coordinates of the corners for the map area
+"""
+type MapBounds {
+  """
+  Coordinate of the upper-right corner
+  """
+  northeast: Coordinate
+
+  """
+  Coordinate of lower-left corner
+  """
+  southwest: Coordinate
+}
+
+"""
+Country code
+"""
+enum CountryCode {
+  """
+  This is special value for location "wyspy i terytoria zależne" (id: 74)
+  """
+  XX
+
+  """
+  Andorra
+  """
+  AD
+
+  """
+  United Arab Emirates
+  """
+  AE
+
+  """
+  Afghanistan
+  """
+  AF
+
+  """
+  Antigua and Barbuda
+  """
+  AG
+
+  """
+  Anguilla
+  """
+  AI
+
+  """
+  Albania
+  """
+  AL
+
+  """
+  Armenia
+  """
+  AM
+
+  """
+  Netherlands Antilles
+  """
+  AN
+
+  """
+  Angola
+  """
+  AO
+
+  """
+  Antarctica
+  """
+  AQ
+
+  """
+  Argentina
+  """
+  AR
+
+  """
+  American Samoa
+  """
+  AS
+
+  """
+  Austria
+  """
+  AT
+
+  """
+  Australia
+  """
+  AU
+
+  """
+  Aruba
+  """
+  AW
+
+  """
+  Azerbaijan
+  """
+  AZ
+
+  """
+  Bosnia and Herzegovina
+  """
+  BA
+
+  """
+  Barbados
+  """
+  BB
+
+  """
+  Bangladesh
+  """
+  BD
+
+  """
+  Belgium
+  """
+  BE
+
+  """
+  Burkina Faso
+  """
+  BF
+
+  """
+  Bulgaria
+  """
+  BG
+
+  """
+  Bahrain
+  """
+  BH
+
+  """
+  Burundi
+  """
+  BI
+
+  """
+  Benin
+  """
+  BJ
+
+  """
+  Saint Barthelemy
+  """
+  BL
+
+  """
+  Bermuda
+  """
+  BM
+
+  """
+  Brunei
+  """
+  BN
+
+  """
+  Bolivia
+  """
+  BO
+
+  """
+  Brazil
+  """
+  BR
+
+  """
+  Bahamas
+  """
+  BS
+
+  """
+  Bhutan
+  """
+  BT
+
+  """
+  Botswana
+  """
+  BW
+
+  """
+  Belarus
+  """
+  BY
+
+  """
+  Belize
+  """
+  BZ
+
+  """
+  Canada
+  """
+  CA
+
+  """
+  Cocos Islands
+  """
+  CC
+
+  """
+  Democratic Republic of the Congo
+  """
+  CD
+
+  """
+  Central African Republic
+  """
+  CF
+
+  """
+  Republic of the Congo
+  """
+  CG
+
+  """
+  Switzerland
+  """
+  CH
+
+  """
+  Ivory Coast
+  """
+  CI
+
+  """
+  Cook Islands
+  """
+  CK
+
+  """
+  Chile
+  """
+  CL
+
+  """
+  Cameroon
+  """
+  CM
+
+  """
+  China
+  """
+  CN
+
+  """
+  Colombia
+  """
+  CO
+
+  """
+  Costa Rica
+  """
+  CR
+
+  """
+  Cuba
+  """
+  CU
+
+  """
+  Cape Verde
+  """
+  CV
+
+  """
+  Curacao
+  """
+  CW
+
+  """
+  Christmas Island
+  """
+  CX
+
+  """
+  Cyprus
+  """
+  CY
+
+  """
+  Czech Republic
+  """
+  CZ
+
+  """
+  Germany
+  """
+  DE
+
+  """
+  Djibouti
+  """
+  DJ
+
+  """
+  Denmark
+  """
+  DK
+
+  """
+  Dominica
+  """
+  DM
+
+  """
+  Dominican Republic
+  """
+  DO
+
+  """
+  Algeria
+  """
+  DZ
+
+  """
+  Ecuador
+  """
+  EC
+
+  """
+  Estonia
+  """
+  EE
+
+  """
+  Egypt
+  """
+  EG
+
+  """
+  Western Sahara
+  """
+  EH
+
+  """
+  Eritrea
+  """
+  ER
+
+  """
+  Spain
+  """
+  ES
+
+  """
+  Ethiopia
+  """
+  ET
+
+  """
+  Finland
+  """
+  FI
+
+  """
+  Fiji
+  """
+  FJ
+
+  """
+  Falkland Islands
+  """
+  FK
+
+  """
+  Micronesia
+  """
+  FM
+
+  """
+  Faroe Islands
+  """
+  FO
+
+  """
+  France
+  """
+  FR
+
+  """
+  Gabon
+  """
+  GA
+
+  """
+  United Kingdom
+  """
+  GB
+
+  """
+  Grenada
+  """
+  GD
+
+  """
+  Georgia
+  """
+  GE
+
+  """
+  Guernsey
+  """
+  GG
+
+  """
+  Ghana
+  """
+  GH
+
+  """
+  Gibraltar
+  """
+  GI
+
+  """
+  Greenland
+  """
+  GL
+
+  """
+  Gambia
+  """
+  GM
+
+  """
+  Guinea
+  """
+  GN
+
+  """
+  Equatorial Guinea
+  """
+  GQ
+
+  """
+  Greece
+  """
+  GR
+
+  """
+  Guatemala
+  """
+  GT
+
+  """
+  Guam
+  """
+  GU
+
+  """
+  Guinea-Bissau
+  """
+  GW
+
+  """
+  Guyana
+  """
+  GY
+
+  """
+  Hong Kong
+  """
+  HK
+
+  """
+  Honduras
+  """
+  HN
+
+  """
+  Croatia
+  """
+  HR
+
+  """
+  Haiti
+  """
+  HT
+
+  """
+  Hungary
+  """
+  HU
+
+  """
+  Indonesia
+  """
+  ID
+
+  """
+  Ireland
+  """
+  IE
+
+  """
+  Israel
+  """
+  IL
+
+  """
+  Isle of Man
+  """
+  IM
+
+  """
+  India
+  """
+  IN
+
+  """
+  British Indian Ocean Territory
+  """
+  IO
+
+  """
+  Iraq
+  """
+  IQ
+
+  """
+  Iran
+  """
+  IR
+
+  """
+  Iceland
+  """
+  IS
+
+  """
+  Italy
+  """
+  IT
+
+  """
+  Jersey
+  """
+  JE
+
+  """
+  Jamaica
+  """
+  JM
+
+  """
+  Jordan
+  """
+  JO
+
+  """
+  Japan
+  """
+  JP
+
+  """
+  Kenya
+  """
+  KE
+
+  """
+  Kyrgyzstan
+  """
+  KG
+
+  """
+  Cambodia
+  """
+  KH
+
+  """
+  Kiribati
+  """
+  KI
+
+  """
+  Comoros
+  """
+  KM
+
+  """
+  Saint Kitts and Nevis
+  """
+  KN
+
+  """
+  North Korea
+  """
+  KP
+
+  """
+  South Korea
+  """
+  KR
+
+  """
+  Kuwait
+  """
+  KW
+
+  """
+  Cayman Islands
+  """
+  KY
+
+  """
+  Kazakhstan
+  """
+  KZ
+
+  """
+  Laos
+  """
+  LA
+
+  """
+  Lebanon
+  """
+  LB
+
+  """
+  Saint Lucia
+  """
+  LC
+
+  """
+  Liechtenstein
+  """
+  LI
+
+  """
+  Sri Lanka
+  """
+  LK
+
+  """
+  Liberia
+  """
+  LR
+
+  """
+  Lesotho
+  """
+  LS
+
+  """
+  Lithuania
+  """
+  LT
+
+  """
+  Luxembourg
+  """
+  LU
+
+  """
+  Latvia
+  """
+  LV
+
+  """
+  Libya
+  """
+  LY
+
+  """
+  Morocco
+  """
+  MA
+
+  """
+  Monaco
+  """
+  MC
+
+  """
+  Moldova
+  """
+  MD
+
+  """
+  Montenegro
+  """
+  ME
+
+  """
+  Saint Martin
+  """
+  MF
+
+  """
+  Madagascar
+  """
+  MG
+
+  """
+  Marshall Islands
+  """
+  MH
+
+  """
+  Macedonia
+  """
+  MK
+
+  """
+  Mali
+  """
+  ML
+
+  """
+  Myanmar
+  """
+  MM
+
+  """
+  Mongolia
+  """
+  MN
+
+  """
+  Macau
+  """
+  MO
+
+  """
+  Northern Mariana Islands
+  """
+  MP
+
+  """
+  Mauritania
+  """
+  MR
+
+  """
+  Montserrat
+  """
+  MS
+
+  """
+  Malta
+  """
+  MT
+
+  """
+  Mauritius
+  """
+  MU
+
+  """
+  Maldives
+  """
+  MV
+
+  """
+  Malawi
+  """
+  MW
+
+  """
+  Mexico
+  """
+  MX
+
+  """
+  Malaysia
+  """
+  MY
+
+  """
+  Mozambique
+  """
+  MZ
+
+  """
+  Namibia
+  """
+  NA
+
+  """
+  New Caledonia
+  """
+  NC
+
+  """
+  Niger
+  """
+  NE
+
+  """
+  Nigeria
+  """
+  NG
+
+  """
+  Nicaragua
+  """
+  NI
+
+  """
+  Netherlands
+  """
+  NL
+
+  """
+  Norway
+  """
+  NO
+
+  """
+  Nepal
+  """
+  NP
+
+  """
+  Nauru
+  """
+  NR
+
+  """
+  Niue
+  """
+  NU
+
+  """
+  New Zealand
+  """
+  NZ
+
+  """
+  Oman
+  """
+  OM
+
+  """
+  Panama
+  """
+  PA
+
+  """
+  Peru
+  """
+  PE
+
+  """
+  French Polynesia
+  """
+  PF
+
+  """
+  Papua New Guinea
+  """
+  PG
+
+  """
+  Philippines
+  """
+  PH
+
+  """
+  Pakistan
+  """
+  PK
+
+  """
+  Poland
+  """
+  PL
+
+  """
+  Saint Pierre and Miquelon
+  """
+  PM
+
+  """
+  Pitcairn
+  """
+  PN
+
+  """
+  Puerto Rico
+  """
+  PR
+
+  """
+  Palestine
+  """
+  PS
+
+  """
+  Portugal
+  """
+  PT
+
+  """
+  Palau
+  """
+  PW
+
+  """
+  Paraguay
+  """
+  PY
+
+  """
+  Qatar
+  """
+  QA
+
+  """
+  Reunion
+  """
+  RE
+
+  """
+  Romania
+  """
+  RO
+
+  """
+  Serbia
+  """
+  RS
+
+  """
+  Russia
+  """
+  RU
+
+  """
+  Rwanda
+  """
+  RW
+
+  """
+  Saudi Arabia
+  """
+  SA
+
+  """
+  Solomon Islands
+  """
+  SB
+
+  """
+  Seychelles
+  """
+  SC
+
+  """
+  Sudan
+  """
+  SD
+
+  """
+  Sweden
+  """
+  SE
+
+  """
+  Singapore
+  """
+  SG
+
+  """
+  Saint Helena
+  """
+  SH
+
+  """
+  Slovenia
+  """
+  SI
+
+  """
+  Svalbard and Jan Mayen
+  """
+  SJ
+
+  """
+  Slovakia
+  """
+  SK
+
+  """
+  Sierra Leone
+  """
+  SL
+
+  """
+  San Marino
+  """
+  SM
+
+  """
+  Senegal
+  """
+  SN
+
+  """
+  Somalia
+  """
+  SO
+
+  """
+  Suriname
+  """
+  SR
+
+  """
+  South Sudan
+  """
+  SS
+
+  """
+  Sao Tome and Principe
+  """
+  ST
+
+  """
+  El Salvador
+  """
+  SV
+
+  """
+  Sint Maarten
+  """
+  SX
+
+  """
+  Syria
+  """
+  SY
+
+  """
+  Swaziland
+  """
+  SZ
+
+  """
+  Turks and Caicos Islands
+  """
+  TC
+
+  """
+  Chad
+  """
+  TD
+
+  """
+  Togo
+  """
+  TG
+
+  """
+  Thailand
+  """
+  TH
+
+  """
+  Tajikistan
+  """
+  TJ
+
+  """
+  Tokelau
+  """
+  TK
+
+  """
+  East Timor
+  """
+  TL
+
+  """
+  Turkmenistan
+  """
+  TM
+
+  """
+  Tunisia
+  """
+  TN
+
+  """
+  Tonga
+  """
+  TO
+
+  """
+  Turkey
+  """
+  TR
+
+  """
+  Trinidad and Tobago
+  """
+  TT
+
+  """
+  Tuvalu
+  """
+  TV
+
+  """
+  Taiwan
+  """
+  TW
+
+  """
+  Tanzania
+  """
+  TZ
+
+  """
+  Ukraine
+  """
+  UA
+
+  """
+  Uganda
+  """
+  UG
+
+  """
+  United States
+  """
+  US
+
+  """
+  Uruguay
+  """
+  UY
+
+  """
+  Uzbekistan
+  """
+  UZ
+
+  """
+  Vatican
+  """
+  VA
+
+  """
+  Saint Vincent and the Grenadines
+  """
+  VC
+
+  """
+  Venezuela
+  """
+  VE
+
+  """
+  British Virgin Islands
+  """
+  VG
+
+  """
+  U.S. Virgin Islands
+  """
+  VI
+
+  """
+  Vietnam
+  """
+  VN
+
+  """
+  Vanuatu
+  """
+  VU
+
+  """
+  Wallis and Futuna
+  """
+  WF
+
+  """
+  Samoa
+  """
+  WS
+
+  """
+  Kosovo
+  """
+  XK
+
+  """
+  Yemen
+  """
+  YE
+
+  """
+  Mayotte
+  """
+  YT
+
+  """
+  South Africa
+  """
+  ZA
+
+  """
+  Zambia
+  """
+  ZM
+
+  """
+  Zimbabwe
+  """
+  ZW
+}
+
+"""
+Package with number of properties by type
+"""
+type LocationNumberOfProperties {
+  """
+  Number of developments
+  """
+  developments: Int
+
+  """
+  Number of properties in developments
+  """
+  developmentProperties: Int
+
+  """
+  Number of all properties
+  """
+  properties: Int
+
+  """
+  Number of flats for sale
+  """
+  propertiesFlatSale: Int
+
+  """
+  Number of flats for rent
+  """
+  propertiesFlatRent: Int
+
+  """
+  Number of houses for sale
+  """
+  propertiesHouseSale: Int
+
+  """
+  Number of houses for rent
+  """
+  propertiesHouseRent: Int
+
+  """
+  Number of plots for sale
+  """
+  propertiesPlotSale: Int
+
+  """
+  Number of plots for rent
+  """
+  propertiesPlotRent: Int
+
+  """
+  Number of commercial properties for sale
+  """
+  propertiesCommercialSale: Int
+
+  """
+  Number of commercial properties for rent
+  """
+  propertiesCommercialRent: Int
+
+  """
+  Number of garages for sale
+  """
+  propertiesGarageSale: Int
+
+  """
+  Number of garages for rent
+  """
+  propertiesGarageRent: Int
+
+  """
+  Number of rooms for rent
+  """
+  propertiesRoomRent: Int
+}
+
+"""
+A property object
+"""
+type Property {
+  """
+  ID of the property
+  """
+  id: Int!
+
+  """
+  Property id unique between all frontends
+  """
+  idOnFrontend: String!
+
+  """
+  Object with Property types information
+  """
+  types: PropertyTypes!
+
+  """
+  Property transaction
+  """
+  transaction: PropertyTransaction!
+
+  """
+  Internal property number given by company
+  """
+  reference: String
+
+  """
+  Object containing information about auction, if this property is an auction
+  """
+  auction: PropertyAuction
+
+  """
+  A set of the owner information for property
+  """
+  contact: OwnerInformation!
+
+  """
+  Return list of supported languages
+  """
+  supportedLanguages: [String]
+
+  """
+  Return a company object for current property or null if it is added by private person
+  """
+  company: Company
+
+  """
+  Return a company agent object for current property or null if property has no agent
+  """
+  companyAgent: CompanyAgent
+
+  """
+  Return a development object for current property or null if property does not belongs to development
+  """
+  development: Development
+
+  """
+  Location of property  - by levels
+  """
+  location: [String]!
+
+  """
+  Short location for listing
+  """
+  locationShort: [String]!
+
+  """
+  Location of the property taken from the internal location tree
+  """
+  locationTree: [String]!
+
+  """
+  Canonical location object
+  """
+  canonicalLocation: Location
+
+  """
+  Canonical street location object
+  """
+  canonicalLocationStreet: Location
+
+  """
+  Canonical location tree (current location is included)
+  """
+  canonicalLocationTree: [Location]
+    @deprecated(reason: "For location tree use canonicalLocation.ancestors")
+
+  """
+  Location street
+  """
+  street: String
+
+  """
+  Canonical location street
+  """
+  streetCanonical: String
+
+  """
+  Building number
+  """
+  buildingNumber: String
+
+  """
+  Apartment number
+  """
+  apartmentNumber: String
+
+  """
+  Property location's post code
+  """
+  postCode: String
+
+  """
+  Mercator projection X coordinate
+  """
+  mercatorX: Int
+
+  """
+  Mercator projection Y coordinate
+  """
+  mercatorY: Int
+
+  """
+  Map precision
+  """
+  mapPrecision: MapPrecision
+
+  """
+  A set of map coordinates and zoom level for the center of location
+  """
+  map: Map
+
+  """
+  A set of map coordinates and zoom level for the center of location of this property
+  """
+  googleMap: GoogleMap
+    @deprecated(
+      reason: "GoogleMap object is changed to Map object. Use `map` field instead."
+    )
+
+  """
+  Country code for the country in which the property is located
+  """
+  countryCode: CountryCode!
+
+  """
+  Main area for all types except plots
+  """
+  totalArea: String
+
+  """
+  Plot area
+  """
+  plotArea: String
+
+  """
+  Available area for flats, houses and commercial
+  """
+  availableArea: String
+
+  """
+  Living area for flats, houses and commercial
+  """
+  livingArea: String
+
+  """
+  Built-up area for houses and commercial
+  """
+  builtupArea: String
+
+  """
+  Common area for commercial
+  """
+  commonArea: String
+
+  """
+  Office area for commercial
+  """
+  officeArea: String
+
+  """
+  Area range
+  """
+  areaRange: AreaRange
+
+  """
+  Area of loggia
+  """
+  loggiaArea: String
+
+  """
+  Area of terrace
+  """
+  terraceArea: String
+
+  """
+  Area of garden
+  """
+  gardenArea: String
+
+  """
+  Area of bathroom
+  """
+  bathroomArea: String
+
+  """
+  Area of balcony
+  """
+  balconyArea: String
+
+  """
+  Length of plot (meters)
+  """
+  plotLength: Float
+
+  """
+  Width of plot (meters)
+  """
+  plotWidth: Float
+
+  """
+  Collection of property attributes
+  """
+  attributes: PropertyAttributes!
+
+  """
+  Property description with html tags
+  """
+  description: String!
+
+  """
+  Property description without html tags and contact data
+  """
+  descriptionForListing(
+    """
+    Cut description for given length
+    """
+    maxLength: Int
+  ): String!
+
+  """
+  Property building type description
+  """
+  buildingType: String
+
+  """
+  Property house type description
+  """
+  houseType: String
+
+  """
+  Property commercial type description
+  """
+  commercialType: String
+
+  """
+  Property plot type description
+  """
+  plotType: String
+
+  """
+  Property building material description
+  """
+  buildingMaterial: String
+
+  """
+  Property access road description
+  """
+  accessRoad: String
+
+  """
+  Property owner ship form description
+  """
+  ownershipForm: String
+
+  """
+  Property electricity description
+  """
+  electricity: String
+
+  """
+  Property gas description
+  """
+  gas: String
+
+  """
+  Property water description
+  """
+  water: String
+
+  """
+  Property internet description
+  """
+  internet: String
+
+  """
+  Property sewerage description
+  """
+  sewerage: String
+
+  """
+  Property infrastructure description
+  """
+  infrastructure: String
+
+  """
+  Property kitchen type description
+  """
+  kitchenType: String
+
+  """
+  Property property condition description
+  """
+  propertyCondition: String
+
+  """
+  Property building condition description
+  """
+  buildingCondition: String
+
+  """
+  Property office type description
+  """
+  officeType: String
+
+  """
+  Property heating description
+  """
+  heating: String
+
+  """
+  Property deposit description
+  """
+  deposit: String
+
+  """
+  Property roof description
+  """
+  roof: String
+
+  """
+  Property floor type description
+  """
+  floorType: String
+
+  """
+  Property walls description
+  """
+  walls: String
+
+  """
+  Property lighting description
+  """
+  lighting: String
+
+  """
+  Property windows description
+  """
+  windows: String
+
+  """
+  Property windows direction description
+  """
+  windowsDirection: String
+
+  """
+  Property building standard description
+  """
+  buildingStandard: String
+
+  """
+  Property parking places description
+  """
+  parkingPlaces: String
+
+  """
+  Property balcony description
+  """
+  balcony: String
+
+  """
+  Property phone line type description
+  """
+  phoneLineType: String
+
+  """
+  Property phone line operator description
+  """
+  phoneLineOperator: String
+
+  """
+  Property network description
+  """
+  network: String
+
+  """
+  Property security description
+  """
+  security: String
+
+  """
+  Property furniture description
+  """
+  furniture: String
+
+  """
+  Property office category description
+  """
+  officeCategory: String
+
+  """
+  Property warehouse category description
+  """
+  warehouseCategory: String
+
+  """
+  Property garage location description
+  """
+  garageLocation: String
+
+  """
+  Property garage construction description
+  """
+  garageConstruction: String
+
+  """
+  Property extra costs description
+  """
+  extraCosts: String
+
+  """
+  Property rental duration description
+  """
+  rentalDuration: String
+
+  """
+  Property vacated from description
+  """
+  vacatedFrom: String
+
+  """
+  Property object name description
+  """
+  objectName: String
+
+  """
+  Property fence description
+  """
+  fence: String
+
+  """
+  Property advertisement text description
+  """
+  advertisementText: String
+
+  """
+  Text of highlight
+  """
+  highlightedText: String @deprecated(reason: "Use highlightText field instead")
+
+  """
+  Text of highlight
+  """
+  highlightText: String
+
+  """
+  Property main price in original currency
+  """
+  price: Price
+
+  """
+  Property price per 1 square meter in original currency
+  """
+  priceM2: Price
+
+  """
+  Property main price in PLN
+  """
+  unifiedPrice: Price
+
+  """
+  Property price per 1 square meter in PLN
+  """
+  unifiedPriceM2: Price
+
+  """
+  Is rent included in price?
+  """
+  isRentIncluded: Boolean
+
+  """
+  Monthly rent price. Only if is not included in price!
+  """
+  rent: Price
+
+  """
+  If price is negotiable?
+  """
+  isNegotiable: Boolean
+
+  """
+  Previous price for this property
+  """
+  previousPrice: Price
+
+  """
+  If property price was changed and now is lower than previous
+  """
+  isDiscounted: Boolean
+
+  """
+  Number of levels in property
+  """
+  apartmentNumberOfLevels: Int
+
+  """
+  Number of levels in building
+  """
+  numberOfLevels: Int
+
+  """
+  Number of rooms in property
+  """
+  numberOfRooms: Int
+
+  """
+  Number of phone lines in property
+  """
+  numberOfPhoneLines: Int
+
+  """
+  Number of parking places belonging to property
+  """
+  numberOfParkingPlaces: Int
+
+  """
+  Number of bathrooms in property
+  """
+  numberOfBathrooms: Int
+
+  """
+  Number of bedroooms in property
+  """
+  numberOfBedrooms: Int
+
+  """
+  Number of elevators in building
+  """
+  numberOfElevators: Int
+
+  """
+  Floor number. -1 for basement and 0 for ground floor.
+  """
+  floor: Int
+
+  """
+  Number of floors in property building
+  """
+  numberOfFloors: Int
+
+  """
+  Date of addition of property
+  """
+  addedAt(
+    """
+    A desired format of the timestamp
+    """
+    format: String
+  ): String
+
+  """
+  Date of last modification of property information
+  """
+  updatedAt(
+    """
+    A desired format of the timestamp
+    """
+    format: String
+  ): String
+
+  """
+  Date when property was up to date
+  """
+  upToDateAt(
+    """
+    A desired format of the timestamp
+    """
+    format: String
+  ): String
+
+  """
+  Information about property promotion points and their expire date
+  """
+  promotion: PropertyPromotion
+
+  """
+  URL for main photo in JPEG format
+  """
+  photo(
+    """
+    A configuration: thumbnail mode and size
+    """
+    configuration: ThumbnailJPEGConfiguration!
+  ): String
+
+  """
+  List of URL for photos in JPEG format
+  """
+  photos(
+    """
+    A configuration: thumbnail mode and size
+    """
+    configuration: ThumbnailJPEGConfiguration!
+  ): [String]!
+
+  """
+  URL for social photo in JPEG format
+  """
+  socialPhoto(
+    """
+    A configuration: thumbnail mode and size
+    """
+    configuration: ThumbnailJPEGConfiguration!
+  ): String!
+
+  """
+  Main plan
+  """
+  plan: Plan
+
+  """
+  List of plans
+  """
+  plans: [Plan]!
+
+  """
+  List of video URL's
+  """
+  videos: [String]!
+
+  """
+  URL for View3D
+  """
+  view3D: String
+
+  """
+  URL for ReVideo
+  """
+  reVideo: String
+
+  """
+  Does property fill terms of MDM program
+  """
+  isMdm(
+    """
+    Does property fill extended terms of MDM program
+    """
+    extended: Boolean
+  ): Boolean
+
+  """
+  Special identifier of property uniqueness
+  """
+  identifierOfUniqueness: Int
+
+  """
+  Is the property a (possible) duplicate of another property?
+  """
+  isPossibleDuplicate: Boolean
+
+  """
+  Was property added in our systems A3K or A5K?
+  """
+  isPropertyFromMorizonGroup: Boolean
+
+  """
+  Annual energy demand
+  """
+  energyDemand: Float
+
+  """
+  Height inside the rooms
+  """
+  insideHeight: Int
+
+  """
+  Year in which the property was built
+  """
+  buildYear: Int
+
+  """
+  Can the property be used for an office?
+  """
+  isForOffice: Boolean
+
+  """
+  Is property exclusive?
+  """
+  isExclusive: Boolean
+
+  """
+  Is property luxury?
+  """
+  isLuxury: Boolean
+
+  """
+  Is property a part of the development?
+  """
+  isFirstOwner: Boolean
+
+  """
+  Is it possible to swap for another property?
+  """
+  isForSwap: Boolean
+
+  """
+  Is property reserved?
+  """
+  isReserved: Boolean
+
+  """
+  Is property recommended?
+  """
+  isRecommended: Boolean
+
+  """
+  Is offer promoted in TOP?
+  """
+  isTopPromoted: Boolean
+
+  """
+  Is property highlighted on requested client?
+  """
+  isHighlighted: Boolean
+
+  """
+  Property market type.
+  """
+  marketType: MarketType
+
+  """
+  Property view count
+  """
+  viewCount: Int
+
+  """
+  A list of dictionaries assigned to property
+  """
+  dictionaries: [Dictionary]
+}
+
+"""
+Object handle information about property types
+"""
+type PropertyTypes {
+  """
+  Property primary type (last level)
+  """
+  primaryType: PropertyType
+
+  """
+  Property primary type [1-6]
+  """
+  primaryTypeRoot: PropertyType
+
+  """
+  Property main type dependent on search context (last level)
+  """
+  mainType: PropertyType
+
+  """
+  Property main type dependent on search context [1-6]
+  """
+  mainTypeRoot: PropertyType
+
+  """
+  List of all types path
+  """
+  pathList: [String]
+}
+
+"""
+Property type
+"""
+enum PropertyType {
+  """
+  Flat
+  """
+  FLAT
+
+  """
+  House
+  """
+  HOUSE
+
+  """
+  Plot
+  """
+  PLOT
+
+  """
+  Commercial
+  """
+  COMMERCIAL
+
+  """
+  Garage
+  """
+  GARAGE
+
+  """
+  Room
+  """
+  ROOM
+
+  """
+  Office
+  """
+  OFFICE
+
+  """
+  Land
+  """
+  LAND
+
+  """
+  Commerce service
+  """
+  COMMERCE_SERVICE
+
+  """
+  Restaurant premises
+  """
+  RESTAURANT_PREMISES
+
+  """
+  Commercial premises
+  """
+  COMMERCIAL_PREMISES
+
+  """
+  Service premises
+  """
+  SERVICE_PREMISES
+
+  """
+  Warehouse hall
+  """
+  WAREHOUSE_HALL
+
+  """
+  Hotels
+  """
+  HOTELS
+
+  """
+  Commercial object
+  """
+  COMMERCIAL_OBJECT
+
+  """
+  Offices
+  """
+  OFFICES
+
+  """
+  Office building
+  """
+  OFFICE_BUILDING
+
+  """
+  Boardroom
+  """
+  BOARDROOM
+
+  """
+  Hotel
+  """
+  HOTEL
+
+  """
+  Resort
+  """
+  RESORT
+
+  """
+  Guesthouse
+  """
+  GUESTHOUSE
+
+  """
+  Construction land
+  """
+  LAND_CONSTRUCTION
+
+  """
+  Agricultural land
+  """
+  LAND_AGRICULTURAL
+
+  """
+  Forest land
+  """
+  LAND_FOREST
+
+  """
+  Agricultural farm
+  """
+  AGRICULTURAL_FARM
+
+  """
+  Industrial land
+  """
+  LAND_INDUSTRIAL
+
+  """
+  Commerce service land
+  """
+  LAND_COMMERCE_SERVICE
+
+  """
+  Distribution center
+  """
+  DISTRIBUTION_CENTER
+
+  """
+  Hall
+  """
+  HALL
+
+  """
+  Warehouse
+  """
+  WAREHOUSE
+
+  """
+  Farm
+  """
+  FARM
+
+  """
+  Tenement or apartment block
+  """
+  TENEMENT_APARTMENT_BLOCK
+
+  """
+  Historical building
+  """
+  HISTORICAL_BUILDING
+
+  """
+  Multifamily construction land
+  """
+  LAND_CONSTRUCTION_MULTIFAMILY
+
+  """
+  Factory
+  """
+  FACTORY
+
+  """
+  Other object
+  """
+  OTHER_OBJECT
+}
+
+"""
+Property transaction
+"""
+enum PropertyTransaction {
+  """
+  For sale
+  """
+  SALE
+
+  """
+  For rent
+  """
+  RENT
+}
+
+type PropertyAuction {
+  """
+  Is this property an auction?
+  """
+  isAuction: Boolean
+
+  """
+  Date when auction takes place
+  """
+  term(
+    """
+    A desired format of the timestamp
+    """
+    format: String
+  ): String
+
+  """
+  Deposit (vadium) for auction
+  """
+  deposit: String
+}
+
+type OwnerInformation {
+  """
+  Set of company contact information
+  """
+  company: OwnerInformationCompany
+
+  """
+  Set of person contact information
+  """
+  person: OwnerInformationPerson
+
+  """
+  Contact comment lines
+  """
+  contactComment: [String!]!
+
+  """
+  Hide contact data?
+  """
+  hideContactData: Boolean!
+}
+
+type OwnerInformationCompany {
+  """
+  Company name
+  """
+  name: String
+
+  """
+  Company type
+  """
+  type: OwnerInformationCompanyType
+
+  """
+  URL for image with company logo in PNG format
+  """
+  logo(
+    """
+    A configuration: thumbnail mode and size
+    """
+    configuration: ThumbnailPNGConfiguration!
+  ): String
+
+  """
+  Company address. Divided at newlines.
+  """
+  address: [String]
+
+  """
+  A list of company phone numbers
+  """
+  phones: [String]
+
+  """
+  A list of company fax numbers
+  """
+  faxes: [String]
+
+  """
+  A list of company websites
+  """
+  websites: [Website]
+
+  """
+  Show PFRN logo?
+  """
+  pfrnMember: Boolean
+}
+
+"""
+Owner information company type
+"""
+enum OwnerInformationCompanyType {
+  """
+  Agency
+  """
+  AGENCY
+
+  """
+  Developer
+  """
+  DEVELOPER
+
+  """
+  Sales office
+  """
+  SALES_OFFICE
+
+  """
+  Institution
+  """
+  INSTITUTION
+
+  """
+  Private owner
+  """
+  OWNER
+}
+
+"""
+A set of possible thumbnail configurations for PNG format
+"""
+enum ThumbnailPNGConfiguration {
+  """
+  A thumbnail for Morizon development contact
+  """
+  CENTER_135X72
+}
+
+type Website {
+  uri: String
+  linkExchange: Boolean
+}
+
+type OwnerInformationPerson {
+  """
+  Person name
+  """
+  name: String
+
+  """
+  PersonType
+  """
+  type: OwnerInformationPersonType
+
+  """
+  URL for image with contact person photo in JPEG format
+  """
+  photo(
+    """
+    A configuration: thumbnail mode and size
+    """
+    configuration: ThumbnailJPEGConfiguration!
+  ): String
+
+  """
+  A list of company phone numbers
+  """
+  phones: [String]
+
+  """
+  A list of company fax numbers
+  """
+  faxes: [String]
+
+  """
+  A list of company websites
+  """
+  websites: [Website]
+
+  """
+  GG contact number
+  """
+  gg: Int
+
+  """
+  Skype contact number
+  """
+  skype: String
+
+  """
+  Licence number
+  """
+  licenceNumber: String
+}
+
+"""
+Owner information person type
+"""
+enum OwnerInformationPersonType {
+  """
+  Agent
+  """
+  AGENT
+
+  """
+  Owner
+  """
+  OWNER
+
+  """
+  Assistant
+  """
+  ASSISTANT
+}
+
+"""
+A set of possible thumbnail configurations for JPEG format
+"""
+enum ThumbnailJPEGConfiguration {
+  """
+  A thumbnail for newest listing
+  """
+  CROP_144X100
+
+  """
+  A thumbnail for agent photo
+  """
+  CROP_154X154
+
+  """
+  Scaled Morizon listing format
+  """
+  CROP_618X280
+
+  """
+  Scaled Morizon listing format 2x
+  """
+  CROP_1236X560
+
+  """
+  Twitter image format
+  """
+  CROP_SHRINK_750X560
+
+  """
+  Facebook image format
+  """
+  CROP_SHRINK_1200X630
+
+  """
+  A thumbnail for agent photo
+  """
+  NORMAL_100X100
+
+  """
+
+  """
+  NORMAL_200X200
+
+  """
+  Scaled Morizon property details format
+  """
+  NORMAL_618X280
+
+  """
+  A thumbnail for Morizon gallery
+  """
+  NORMAL_832X468
+
+  """
+  Portrait photo cropped from the top
+  """
+  PORTRAIT_300X300
+
+  """
+  A thumbnail for Morizon full-page gallery
+  """
+  SHRINK_1280X768
+}
+
+"""
+A company object
+"""
+type Company {
+  """
+  ID of the company
+  """
+  id: Int
+
+  """
+  Type of the company
+  """
+  type: CompanyType
+
+  """
+  Name of the company
+  """
+  name: String
+
+  """
+  URL for image with company logo in PNG format
+  """
+  logo(
+    """
+    A configuration: thumbnail mode and size
+    """
+    configuration: ThumbnailPNGConfiguration!
+  ): String
+
+  """
+  Company login
+  """
+  login: String
+
+  """
+  A set of the owner information for company
+  """
+  contact: OwnerInformation
+
+  """
+  Company description with html tags
+  """
+  description: String
+
+  """
+  Company description without html tags and contact data
+  """
+  descriptionForListing(
+    """
+    Cut description for given length
+    """
+    maxLength: Int
+  ): String
+
+  """
+  Is possible duplicate?
+  """
+  isPossibleDuplicate: Boolean
+
+  """
+  Is company exchanging links with us?
+  """
+  linkExchange: Boolean
+
+  """
+  A set of map coordinates and zoom level for the center of location
+  """
+  map: Map
+
+  """
+  A set of map coordinates and zoom level for the center of location of company
+  """
+  googleMap: GoogleMap
+    @deprecated(
+      reason: "GoogleMap object is changed to Map object. Use `map` field instead."
+    )
+
+  """
+  A set of visual settings for company presentation
+  """
+  visualSettings: CompanyVisualSettings
+
+  """
+  Package with number of properties by type
+  """
+  numberOfProperties: CompanyNumberOfProperties
+}
+
+"""
+Company type
+"""
+enum CompanyType {
+  """
+  Agency company type
+  """
+  AGENCY
+
+  """
+  Developer company type
+  """
+  DEVELOPER
+
+  """
+  Ad office company type
+  """
+  AD_OFFICE
+
+  """
+  Autonomy county company type
+  """
+  AUTONOMY_COUNTY
+
+  """
+  Community company type
+  """
+  COMMUNITY
+
+  """
+  Abroad company type
+  """
+  ABROAD
+}
+
+"""
+A set of visual settings for company presentation
+"""
+type CompanyVisualSettings {
+  """
+  Show credit consent?
+  """
+  isCreditConsentEnabled: Boolean
+
+  """
+  Show logo on listing?
+  """
+  isLogoOnListingEnabled: Boolean
+
+  """
+  Show PFRN logo?
+  """
+  isPFRNLogoEnabled: Boolean
+}
+
+"""
+Package with number of properties by type
+"""
+type CompanyNumberOfProperties {
+  """
+  Number of agents in this company
+  """
+  agents: Int
+
+  """
+  Number of developments
+  """
+  developments: Int
+
+  """
+  Number of all properties
+  """
+  properties: Int
+
+  """
+  Number of flats for sale
+  """
+  propertiesFlatSale: Int
+
+  """
+  Number of flats for rent
+  """
+  propertiesFlatRent: Int
+
+  """
+  Number of houses for sale
+  """
+  propertiesHouseSale: Int
+
+  """
+  Number of houses for rent
+  """
+  propertiesHouseRent: Int
+
+  """
+  Number of plots for sale
+  """
+  propertiesPlotSale: Int
+
+  """
+  Number of plots for rent
+  """
+  propertiesPlotRent: Int
+
+  """
+  Number of commercial properties for sale
+  """
+  propertiesCommercialSale: Int
+
+  """
+  Number of commercial properties for rent
+  """
+  propertiesCommercialRent: Int
+
+  """
+  Number of garages for sale
+  """
+  propertiesGarageSale: Int
+
+  """
+  Number of garages for rent
+  """
+  propertiesGarageRent: Int
+
+  """
+  Number of rooms for rent
+  """
+  propertiesRoomRent: Int
+}
+
+"""
+A company agent object
+"""
+type CompanyAgent {
+  """
+  ID of the agent
+  """
+  id: Int
+
+  """
+  Company agent belongs to
+  """
+  company: Company
+
+  """
+  Agents name
+  """
+  name: String
+
+  """
+  Agents licence number
+  """
+  licenceNumber: String
+
+  """
+  URL for image with agents photo in JPEG format
+  """
+  photo(
+    """
+    A configuration: thumbnail mode and size
+    """
+    configuration: ThumbnailJPEGConfiguration!
+  ): String
+
+  """
+  A set of the owner information for company agent
+  """
+  contact: OwnerInformation
+
+  """
+  Package with number of properties by type
+  """
+  numberOfProperties: CompanyAgentNumberOfProperties
+
+  """
+  Agents "about me" text
+  """
+  aboutMe: String
+
+  """
+  Company agent working hours
+  """
+  workingHours: String
+
+  """
+  Average offers rank
+  """
+  averageRank: Float
+
+  """
+  Average reaction time of agent
+  """
+  averageReactionTime: Float
+
+  """
+  Is possible duplicate?
+  """
+  isPossibleDuplicate: Boolean
+}
+
+"""
+Package with number of properties by type
+"""
+type CompanyAgentNumberOfProperties {
+  """
+  Number of all properties
+  """
+  properties: Int
+
+  """
+  Number of flats for sale
+  """
+  propertiesFlatSale: Int
+
+  """
+  Number of flats for rent
+  """
+  propertiesFlatRent: Int
+
+  """
+  Number of houses for sale
+  """
+  propertiesHouseSale: Int
+
+  """
+  Number of houses for rent
+  """
+  propertiesHouseRent: Int
+
+  """
+  Number of plots for sale
+  """
+  propertiesPlotSale: Int
+
+  """
+  Number of plots for rent
+  """
+  propertiesPlotRent: Int
+
+  """
+  Number of commercial properties for sale
+  """
+  propertiesCommercialSale: Int
+
+  """
+  Number of commercial properties for rent
+  """
+  propertiesCommercialRent: Int
+
+  """
+  Number of garages for sale
+  """
+  propertiesGarageSale: Int
+
+  """
+  Number of garages for rent
+  """
+  propertiesGarageRent: Int
+
+  """
+  Number of rooms for rent
+  """
+  propertiesRoomRent: Int
+}
+
+"""
+Development object representing investment
+"""
+type Development {
+  """
+  An ID of the development
+  """
+  id: Int
+
+  """
+  Return a company object for current development
+  """
+  company: Company
+
+  """
+  A set of the owner information for development
+  """
+  contact: OwnerInformation
+
+  """
+  Name of the development
+  """
+  name: String
+
+  """
+  Location of development  - by levels
+  """
+  location: [String]
+
+  """
+  Short location for listing
+  """
+  locationShort: [String]
+
+  """
+  Location of the development taken from the internal location tree
+  """
+  locationTree: [String]
+
+  """
+  Location street
+  """
+  locationStreet: String
+
+  """
+  A set of map coordinates and zoom level for the center of location
+  """
+  map: Map
+
+  """
+  A set of map coordinates and zoom level for the center of location of this development
+  """
+  googleMap: GoogleMap
+    @deprecated(
+      reason: "GoogleMap object is changed to Map object. Use `map` field instead."
+    )
+
+  """
+  Country code for the country in which the development is located
+  """
+  countryCode: CountryCode
+
+  """
+  URL for development logo in PNG format
+  """
+  logo(
+    """
+    A configuration: thumbnail mode and size
+    """
+    configuration: ThumbnailPNGConfiguration!
+  ): String
+
+  """
+  URL for main photo in JPEG format
+  """
+  photo(
+    """
+    A configuration: thumbnail mode and size
+    """
+    configuration: ThumbnailJPEGConfiguration!
+  ): String
+
+  """
+  List of photos urls in JPEG format
+  """
+  photos(
+    """
+    A configuration: thumbnail mode and size
+    """
+    configuration: ThumbnailJPEGConfiguration!
+  ): [String]
+
+  """
+  List of videos urls
+  """
+  videos: [String]
+
+  """
+  URL for 3D view
+  """
+  view3D: String
+
+  """
+  Main price range
+  """
+  price: PriceRange
+
+  """
+  Main price range in PLN
+  """
+  unifiedPrice: PriceRange
+
+  """
+  Price range for flats
+  """
+  flatsPriceM2: PriceRange
+
+  """
+  Price range in PLN for flats
+  """
+  unifiedFlatsPriceM2: PriceRange
+
+  """
+  Price range for houses
+  """
+  flatsHousesM2: PriceRange
+
+  """
+  Price range in PLN for houses
+  """
+  unifiedHousesPriceM2: PriceRange
+
+  """
+  Price range for commercial properties
+  """
+  flatsCommercialsM2: PriceRange
+
+  """
+  Price range in PLN for commercial properties
+  """
+  unifiedCommercialsPriceM2: PriceRange
+
+  """
+  Main area range of development properties
+  """
+  mainArea: AreaRange
+
+  """
+  Area range of flats in the development
+  """
+  flatsArea: AreaRange
+
+  """
+  Area range of houses in the development
+  """
+  housesArea: AreaRange
+
+  """
+  Area range of commercial properties in the development
+  """
+  commercialsArea: AreaRange
+
+  """
+  Office area of the development [m²]
+  """
+  officeArea: String
+
+  """
+  Retail and service area of the development [m²]
+  """
+  retailArea: String
+
+  """
+  Storage area of the development [m²]
+  """
+  storageArea: String
+
+  """
+  Common area ratio
+  """
+  commonAreaRatio: Float
+
+  """
+  Should it be highlighted?
+  """
+  isHighlighted: Boolean
+
+  """
+  Is development before beginning?
+  """
+  isPlanned: Boolean
+
+  """
+  Is development completed?
+  """
+  isCompleted: Boolean
+
+  """
+  Is development commercial?
+  """
+  isCommercial: Boolean
+
+  """
+  Is development adapted for the disabled?
+  """
+  isAdaptedForTheDisabled: Boolean
+
+  """
+  Is this development an auction?
+  """
+  auction: DevelopmentAuction
+
+  """
+  Collection of development attributes
+  """
+  attributes: DevelopmentAttributes
+
+  """
+  Is this development under MDM program?
+  """
+  isPlMdm: Boolean
+
+  """
+  Is this pro development?
+  """
+  isPro: Boolean
+
+  """
+  Number of properties within development under MDM
+  """
+  plMdmCount: Int
+
+  """
+  Development description with html tags
+  """
+  description: String
+
+  """
+  Development description without html tags and contact data
+  """
+  descriptionForListing(
+    """
+    Cut description for given length
+    """
+    maxLength: Int
+  ): String
+
+  """
+  Development access road type
+  """
+  accessRoad: String
+
+  """
+  Short development info (title)
+  """
+  advertisementText: String
+
+  """
+  Development balcony description
+  """
+  balcony: String
+
+  """
+  Development equipment standards description
+  """
+  equipmentStandard: String
+
+  """
+  Development funding description
+  """
+  funding: String
+
+  """
+  Development garage description
+  """
+  garage: String
+
+  """
+  Development neighbourhood description
+  """
+  neighbourhood: String
+
+  """
+  Development ownership form description
+  """
+  ownershipForm: String
+
+  """
+  Development parking places description
+  """
+  parkingPlaces: String
+
+  """
+  Description of payment method
+  """
+  payment: String
+
+  """
+  Description of any promotions
+  """
+  promotion: String
+
+  """
+  Date of addition of development
+  """
+  addedAt(
+    """
+    A desired format of the timestamp
+    """
+    format: String
+  ): String
+
+  """
+  Date of last modification of development information
+  """
+  updatedAt(
+    """
+    A desired format of the timestamp
+    """
+    format: String
+  ): String
+
+  """
+  Bounds of expected completion date of development build.
+  """
+  completionDate: CompletionDate
+
+  """
+  Date of expected start of sale
+  """
+  saleStartTerm(
+    """
+    A desired format of the date
+    """
+    format: String
+  ): String
+
+  """
+  Number of buildings in development
+  """
+  numberOfBuildings: Int
+
+  """
+  Number of properties rooms in development (min and max).
+  """
+  numberOfRooms: DevelopmentNumberOfRooms
+
+  """
+  Number of reserved properties in development
+  """
+  numberOfReserved: Int
+
+  """
+  List of development promotions
+  """
+  promotions: [DevelopmentPromotion]
+
+  """
+  List of property types offered by the development
+  """
+  propertyTypes: [PropertyType]
+
+  """
+  Number of properties in the development matching current search filters
+  """
+  numberOfPropertiesMatchingFilters: Int
+}
+
+"""
+Object representing a price range (from and to)
+"""
+type PriceRange {
+  """
+  Smallest price
+  """
+  from: Price
+
+  """
+  Biggest price
+  """
+  to: Price
+}
+
+"""
+Price amount and currency
+"""
+type Price {
+  """
+  Price amount with `.` as decimal separator
+  """
+  amount: String
+
+  """
+  Price currency code (ex. "USD")
+  """
+  currency: String
+}
+
+"""
+Object representing an area range (from and to)
+"""
+type AreaRange {
+  """
+  Lower bound of the area range [m²]
+  """
+  from: String
+
+  """
+  Upper bound of the area range [m²]
+  """
+  to: String
+}
+
+type DevelopmentAuction {
+  """
+  Is this development an auction?
+  """
+  isAuction: Boolean
+
+  """
+  Date when auction takes place
+  """
+  term(
+    """
+    A desired format of the timestamp
+    """
+    format: String
+  ): String
+
+  """
+  Price the auction begins from
+  """
+  startingPrice: String
+
+  """
+  Deposit (vadium) for auction
+  """
+  deposit: String
+}
+
+"""
+Collection of development attributes
+"""
+type DevelopmentAttributes {
+  """
+  Has above ground parking?
+  """
+  aboveGroundParking: Boolean
+
+  """
+  Has air conditioning?
+  """
+  airConditioning: Boolean
+
+  """
+  Has elevator?
+  """
+  elevator: Boolean
+
+  """
+  Has exterior lighting?
+  """
+  exteriorLighting: Boolean
+
+  """
+  Has fence?
+  """
+  fence: Boolean
+
+  """
+  Has fitness club nearby?
+  """
+  fitnessClub: Boolean
+
+  """
+  Has intercom?
+  """
+  intercom: Boolean
+
+  """
+  Has kindergarten nearby?
+  """
+  kindergarten: Boolean
+
+  """
+  Has multimedia?
+  """
+  multimedia: Boolean
+
+  """
+  Has any outside green area?
+  """
+  outsideGreenArea: Boolean
+
+  """
+  Has playground nearby?
+  """
+  playground: Boolean
+
+  """
+  Has pool?
+  """
+  pool: Boolean
+
+  """
+  Has any kind of promotion ongoing?
+  """
+  promotion: Boolean
+
+  """
+  Has any contest promotion?
+  """
+  promotionContest: Boolean
+
+  """
+  Has open days planned?
+  """
+  promotionOpenDays: Boolean
+
+  """
+  Has any promotion?
+  """
+  promotionPromotion: Boolean
+
+  """
+  Has public transport nearby?
+  """
+  publicTransportNearby: Boolean
+
+  """
+  Has reception?
+  """
+  reception: Boolean
+
+  """
+  Has secure parking?
+  """
+  secureParking: Boolean
+
+  """
+  Has security?
+  """
+  security: Boolean
+
+  """
+  Has any shops?
+  """
+  shops: Boolean
+
+  """
+  Has smart-home system?
+  """
+  smartHomeSystem: Boolean
+
+  """
+  Has storage room?
+  """
+  storageRoom: Boolean
+
+  """
+  Has underground parking?
+  """
+  undergroundParking: Boolean
+
+  """
+  Has videophone?
+  """
+  videophone: Boolean
+}
+
+"""
+Bounds of expected completion date of development build
+"""
+type CompletionDate {
+  """
+  Date of the expected start of completion
+  """
+  start(
+    """
+    A desired format of the date
+    """
+    format: String
+  ): String
+
+  """
+  Date of the expected end of completion
+  """
+  end(
+    """
+    A desired format of the date
+    """
+    format: String
+  ): String
+}
+
+"""
+Number of rooms range (min and max)
+"""
+type DevelopmentNumberOfRooms {
+  """
+  Lowest number of rooms of properties in development
+  """
+  min: Int
+
+  """
+  Highest number of rooms of properties in development
+  """
+  max: Int
+}
+
+"""
+Information about development promotion
+"""
+type DevelopmentPromotion {
+  """
+  Promotion type
+  """
+  type: DevelopmentPromotionType
+
+  """
+  URL for promotion photo in JPEG format
+  """
+  photo(
+    """
+    A configuration: thumbnail mode and size
+    """
+    configuration: ThumbnailJPEGConfiguration!
+  ): String
+
+  """
+  Promotion description
+  """
+  description: String
+
+  """
+  Promotion short description
+  """
+  shortDescription: String
+}
+
+"""
+Development promotion type
+"""
+enum DevelopmentPromotionType {
+  """
+  Contest
+  """
+  CONTEST
+
+  """
+  Promotion
+  """
+  PROMOTION
+
+  """
+  Open days
+  """
+  OPEN_DAYS
+}
+
+"""
+Property map precision; defined by property owner
+"""
+enum MapPrecision {
+  """
+  Approximate precision
+  """
+  APPROXIMATE
+
+  """
+  Exact precision
+  """
+  EXACTLY
+
+  """
+  To the house number
+  """
+  HOUSE_NR
+
+  """
+  To street
+  """
+  STREET
+
+  """
+  To quarter
+  """
+  QUARTER
+
+  """
+  To city
+  """
+  CITY
+
+  """
+  To voivodeship
+  """
+  VOIVODESHIP
+}
+
+"""
+Collection of property attributes
+"""
+type PropertyAttributes {
+  """
+  Is property discounted?
+  """
+  discount: Boolean
+
+  """
+  Is property a part of closed complex?
+  """
+  closedComplex: Boolean
+
+  """
+  Is kitchen furnished?
+  """
+  kitchenIsFurnished: Boolean
+
+  """
+  Does it have an attic?
+  """
+  attic: Boolean
+
+  """
+  Does it have any kind of balcony/terrace?
+  """
+  balcony: Boolean
+
+  """
+  Does it have a basement?
+  """
+  basement: Boolean
+
+  """
+  Does it have a shop display window?
+  """
+  displayWindow: Boolean
+
+  """
+  Does it have electricity?
+  """
+  electricity: Boolean
+
+  """
+  Is there an elevator in the building?
+  """
+  elevator: Boolean
+
+  """
+  Does it have a fireplace?
+  """
+  fireplace: Boolean
+
+  """
+  Is the property furnished?
+  """
+  furniture: Boolean
+
+  """
+  Does it have gas?
+  """
+  gas: Boolean
+
+  """
+  Does it have an intercom?
+  """
+  intercom: Boolean
+
+  """
+  Does it have an internet connection?
+  """
+  internet: Boolean
+
+  """
+  Does it have access to sewerage system; and does not have a cesspit?
+  """
+  nonCesspitSewerage: Boolean
+
+  """
+  Does it have a phone?
+  """
+  phone: Boolean
+
+  """
+  Does it have a ramp to access property?
+  """
+  ramp: Boolean
+
+  """
+  Does it have a server room?
+  """
+  serverRoom: Boolean
+
+  """
+  Does it have a social room?
+  """
+  socialRoom: Boolean
+
+  """
+  Does it have a three phase electric power?
+  """
+  threePhasePower: Boolean
+
+  """
+  Does it have access to drinking water?
+  """
+  water: Boolean
+
+  """
+  Does it have a heating?
+  """
+  heating: Boolean
+
+  """
+  Does it have a severage?
+  """
+  sewerage: Boolean
+
+  """
+  Does it have gas oven?
+  """
+  gasOven: Boolean
+
+  """
+  Does it have a terrace?
+  """
+  terrace: Boolean
+
+  """
+  Is buyer released from paying commission?
+  """
+  noCommission: Boolean
+
+  """
+  Does it have a swimming pool?
+  """
+  swimmingPool: Boolean
+
+  """
+  Does it have a fridge?
+  """
+  fridge: Boolean
+
+  """
+  Does it have a washing machine?
+  """
+  washingMachine: Boolean
+
+  """
+  Does it have a tv set?
+  """
+  tvSet: Boolean
+
+  """
+  Does it have a reception?
+  """
+  reception: Boolean
+
+  """
+  Does it have an air conditioning?
+  """
+  ac: Boolean
+
+  """
+  Does it have a docks?
+  """
+  docks: Boolean
+
+  """
+  Does it have a garden?
+  """
+  garden: Boolean
+
+  """
+  Does it have a loggia?
+  """
+  loggia: Boolean
+
+  """
+  Does it have a styled garden?
+  """
+  gardenIsStyled: Boolean
+
+  """
+  Is good price for property?
+  """
+  goodPrice: Boolean
+
+  """
+  Does property have any associated POIs?
+  """
+  pois: Boolean
+
+  """
+  Is wc connected to the bathroom?
+  """
+  bathroomWithWc: Boolean
+
+  """
+  Is pets allowed?
+  """
+  petsAllowed: Boolean
+
+  """
+  Does property has private parking places?
+  """
+  parkingPlaces: Boolean
+}
+
+"""
+Information about property promotion points and their expire date
+"""
+type PropertyPromotion {
+  """
+  Amount of promotion points
+  """
+  points: Int
+
+  """
+  Promotion points expire date
+  """
+  expiresAt(
+    """
+    A desired format of the timestamp
+    """
+    format: String
+  ): String
+}
+
+"""
+A plan object with its direct URL and thumbnail
+"""
+type Plan {
+  """
+  URL for plan thumbnail in JPEG format
+  """
+  thumbnail(
+    """
+    A configuration: thumbnail mode and size
+    """
+    configuration: ThumbnailJPEGConfiguration!
+  ): String
+
+  """
+  Direct URL to plan
+  """
+  direct: String
+}
+
+"""
+Market type
+"""
+enum MarketType {
+  """
+  Primary market
+  """
+  PRIMARY
+
+  """
+  Secondary market
+  """
+  SECONDARY
+}
+
+"""
+A dictionary object
+"""
+type Dictionary {
+  """
+  ID of the dictionary
+  """
+  id: DictionaryId
+
+  """
+  Type of the dictionary
+  """
+  type: DictionaryType
+
+  """
+  Dictionary value
+  """
+  value: String
+}
+
+"""
+Dictionaries ID's
+"""
+enum DictionaryId {
+  """
+  None dictionary value
+  """
+  GAS_NONE
+
+  """
+  Municipal dictionary value
+  """
+  GAS_MUNICIPAL
+
+  """
+  Cylinder dictionary value
+  """
+  GAS_CYLINDER
+
+  """
+  Possible to connect dictionary value
+  """
+  GAS_POSSIBLE_TO_CONNECT
+
+  """
+  Brick dictionary value
+  """
+  BUILDING_MATERIAL_BRICK
+
+  """
+  Concrete dictionary value
+  """
+  BUILDING_MATERIAL_CONCRETE
+
+  """
+  Wood dictionary value
+  """
+  BUILDING_MATERIAL_WOOD
+
+  """
+  Hollow block dictionary value
+  """
+  BUILDING_MATERIAL_HOLLOW_BLOCK
+
+  """
+  Varied dictionary value
+  """
+  BUILDING_MATERIAL_VARIED
+
+  """
+  Stone dictionary value
+  """
+  BUILDING_MATERIAL_STONE
+
+  """
+  Ytong dictionary value
+  """
+  BUILDING_MATERIAL_YTONG
+
+  """
+  H frame dictionary value
+  """
+  BUILDING_MATERIAL_H_FRAME
+
+  """
+  Suporex dictionary value
+  """
+  BUILDING_MATERIAL_SUPOREX
+
+  """
+  LPS dictionary value
+  """
+  BUILDING_MATERIAL_LPS
+
+  """
+  Detached house dictionary value
+  """
+  HOUSE_TYPE_DETACHED_HOUSE
+
+  """
+  Semi-detached house dictionary value
+  """
+  HOUSE_TYPE_SEMI_DETACHED_HOUSE
+
+  """
+  Palace/mansion dictionary value
+  """
+  HOUSE_TYPE_PALACE_MANSION
+
+  """
+  Atrium dictionary value
+  """
+  HOUSE_TYPE_ATRIUM
+
+  """
+  Cottage dictionary value
+  """
+  HOUSE_TYPE_COTTAGE
+
+  """
+  Attached houses dictionary value
+  """
+  HOUSE_TYPE_ATTACHED_HOUSES
+
+  """
+  Building dictionary value
+  """
+  HOUSE_TYPE_BUILDING
+
+  """
+  Multi-family building dictionary value
+  """
+  HOUSE_TYPE_MULTI_FAMILY_BUILDING
+
+  """
+  Farm land dictionary value
+  """
+  HOUSE_TYPE_FARM_LAND
+
+  """
+  Excellent dictionary value
+  """
+  BUILDING_CONDITION_EXCELLENT
+
+  """
+  Good dictionary value
+  """
+  BUILDING_CONDITION_GOOD
+
+  """
+  For renovation dictionary value
+  """
+  BUILDING_CONDITION_FOR_RENOVATION
+
+  """
+  For demolition dictionary value
+  """
+  BUILDING_CONDITION_FOR_DEMOLITION
+
+  """
+  Construction started dictionary value
+  """
+  BUILDING_CONDITION_CONSTRUCTION_STARTED
+
+  """
+  Unfinished - open dictionary value
+  """
+  BUILDING_CONDITION_UNFINISHED_OPEN
+
+  """
+  Unfinished - closed dictionary value
+  """
+  BUILDING_CONDITION_UNFINISHED_CLOSED
+
+  """
+  For finishing dictionary value
+  """
+  BUILDING_CONDITION_FOR_FINISHING
+
+  """
+  Refurbished dictionary value
+  """
+  BUILDING_CONDITION_REFURBISHED
+
+  """
+  None dictionary value
+  """
+  PARKING_PLACES_NONE
+
+  """
+  Garage dictionary value
+  """
+  PARKING_PLACES_GARAGE
+
+  """
+  On street dictionary value
+  """
+  PARKING_PLACES_ON_STREET
+
+  """
+  Underground parking dictionary value
+  """
+  PARKING_PLACES_UNDERGROUND_PARKING
+
+  """
+  Surface parking dictionary value
+  """
+  PARKING_PLACES_SURFACE_PARKING
+
+  """
+  Municipal dictionary value
+  """
+  HEATING_MUNICIPAL
+
+  """
+  Gas dictionary value
+  """
+  HEATING_GAS
+
+  """
+  Electric dictionary value
+  """
+  HEATING_ELECTRIC
+
+  """
+  Oil dictionary value
+  """
+  HEATING_OIL
+
+  """
+  Coal dictionary value
+  """
+  HEATING_COAL
+
+  """
+  Solar heating dictionary value
+  """
+  HEATING_SOLAR_HEATING
+
+  """
+  Fireplace dictionary value
+  """
+  HEATING_FIREPLACE
+
+  """
+  None dictionary value
+  """
+  HEATING_NONE
+
+  """
+  Air conditioning dictionary value
+  """
+  HEATING_AIR_CONDITIONING
+
+  """
+  Floor heating dictionary value
+  """
+  HEATING_FLOOR_HEATING
+
+  """
+  Geothermal energy dictionary value
+  """
+  HEATING_GEOTHERMAL_ENERGY
+
+  """
+  Biomass dictionary value
+  """
+  HEATING_BIOMASS
+
+  """
+  Differentiated heating dictionary value
+  """
+  HEATING_DIFFERENTIATED_HEATING
+
+  """
+  No broadband internet access dictionary value
+  """
+  INTERNET_TYPE_NO_BROADBAND_INTERNET_ACCESS
+
+  """
+  Broadband internet access dictionary value
+  """
+  INTERNET_TYPE_BROADBAND_INTERNET_ACCESS
+
+  """
+  Can be connected dictionary value
+  """
+  INTERNET_TYPE_CAN_BE_CONNECTED
+
+  """
+  Appendix dictionary value
+  """
+  KITCHEN_TYPE_APPENDIX
+
+  """
+  Clearance dictionary value
+  """
+  KITCHEN_TYPE_CLEARANCE
+
+  """
+  Niche dictionary value
+  """
+  KITCHEN_TYPE_NICHE
+
+  """
+  None dictionary value
+  """
+  KITCHEN_TYPE_NONE
+
+  """
+  Open dictionary value
+  """
+  KITCHEN_TYPE_OPEN
+
+  """
+  Semi-open dictionary value
+  """
+  KITCHEN_TYPE_SEMI_OPEN
+
+  """
+  Separate dictionary value
+  """
+  KITCHEN_TYPE_SEPARATE
+
+  """
+  Farm land dictionary value
+  """
+  PLOT_TYPE_FARM_LAND
+
+  """
+  Construction plot dictionary value
+  """
+  PLOT_TYPE_CONSTRUCTION_PLOT
+
+  """
+  Forest land dictionary value
+  """
+  PLOT_TYPE_FOREST_LAND
+
+  """
+  Recreation plot dictionary value
+  """
+  PLOT_TYPE_RECREATION_PLOT
+
+  """
+  Habitation plot dictionary value
+  """
+  PLOT_TYPE_HABITATION_PLOT
+
+  """
+  Industrial plot dictionary value
+  """
+  PLOT_TYPE_INDUSTRIAL_PLOT
+
+  """
+  Commercial services plot dictionary value
+  """
+  PLOT_TYPE_COMMERCIAL_SERVICES_PLOT
+
+  """
+  Multi-family plot dictionary value
+  """
+  PLOT_TYPE_MULTI_FAMILY_PLOT
+
+  """
+  Plot dictionary value
+  """
+  PLOT_TYPE_PLOT
+
+  """
+  Ownership dictionary value
+  """
+  OWNERSHIP_FORM_OWNERSHIP
+
+  """
+  Co-op - tenant dictionary value
+  """
+  OWNERSHIP_FORM_CO_OP_TENANT
+
+  """
+  Share dictionary value
+  """
+  OWNERSHIP_FORM_SHARE
+
+  """
+  Co-op - ownership dictionary value
+  """
+  OWNERSHIP_FORM_CO_OP_OWNERSHIP
+
+  """
+  Perpetual usufruct dictionary value
+  """
+  OWNERSHIP_FORM_PERPETUAL_USUFRUCT
+
+  """
+  Co-op - entered in the land and mortgage register  dictionary value
+  """
+  OWNERSHIP_FORM_CO_OP_ENTERED_IN_THE_LAND_AND_MORTGAGE_REGISTER
+
+  """
+  Asphalt/concret dictionary value
+  """
+  ACCESS_ROAD_ASPHALT_CONCRET
+
+  """
+  None dictionary value
+  """
+  ACCESS_ROAD_NONE
+
+  """
+  Paved dictionary value
+  """
+  ACCESS_ROAD_PAVED
+
+  """
+  Unpaved dictionary value
+  """
+  ACCESS_ROAD_UNPAVED
+
+  """
+  Municipal dictionary value
+  """
+  SEWERAGE_MUNICIPAL
+
+  """
+  Septic tank dictionary value
+  """
+  SEWERAGE_SEPTIC_TANK
+
+  """
+  None dictionary value
+  """
+  SEWERAGE_NONE
+
+  """
+  Reclamation/treatment plant dictionary value
+  """
+  SEWERAGE_RECLAMATION_TREATMENT_PLANT
+
+  """
+  Brick wall dictionary value
+  """
+  FENCE_BRICK_WALL
+
+  """
+  Wooden fence dictionary value
+  """
+  FENCE_WOODEN_FENCE
+
+  """
+  Mesh dictionary value
+  """
+  FENCE_MESH
+
+  """
+  None dictionary value
+  """
+  FENCE_NONE
+
+  """
+  Hedge dictionary value
+  """
+  FENCE_HEDGE
+
+  """
+  Metal/forged dictionary value
+  """
+  FENCE_METAL_FORGED
+
+  """
+  Other dictionary value
+  """
+  FENCE_OTHER
+
+  """
+  Concrete dictionary value
+  """
+  FENCE_CONCRETE
+
+  """
+  Apartment building dictionary value
+  """
+  BUILDING_TYPE_APARTMENT_BUILDING
+
+  """
+  Block of flats dictionary value
+  """
+  BUILDING_TYPE_BLOCK_OF_FLATS
+
+  """
+  Multifamily house dictionary value
+  """
+  BUILDING_TYPE_MULTIFAMILY_HOUSE
+
+  """
+  Tenement dictionary value
+  """
+  BUILDING_TYPE_TENEMENT
+
+  """
+  Flat roof dictionary value
+  """
+  ROOF_TYPE_FLAT_ROOF
+
+  """
+  Gabled roof dictionary value
+  """
+  ROOF_TYPE_GABLED_ROOF
+
+  """
+  None dictionary value
+  """
+  ROOF_TYPE_NONE
+
+  """
+  Metal dictionary value
+  """
+  ROOF_TYPE_METAL
+
+  """
+  Tiles dictionary value
+  """
+  ROOF_TYPE_TILES
+
+  """
+  Asbestos cement dictionary value
+  """
+  ROOF_TYPE_ASBESTOS_CEMENT
+
+  """
+  Shingle dictionary value
+  """
+  ROOF_TYPE_SHINGLE
+
+  """
+  Slate dictionary value
+  """
+  ROOF_TYPE_SLATE
+
+  """
+  Felt dictionary value
+  """
+  ROOF_TYPE_FELT
+
+  """
+  Thatch dictionary value
+  """
+  ROOF_TYPE_THATCH
+
+  """
+  Very good dictionary value
+  """
+  PROPERTY_CONDITION_VERY_GOOD
+
+  """
+  Good dictionary value
+  """
+  PROPERTY_CONDITION_GOOD
+
+  """
+  For minor refurbishment dictionary value
+  """
+  PROPERTY_CONDITION_FOR_MINOR_REFURBISHMENT
+
+  """
+  For renovation dictionary value
+  """
+  PROPERTY_CONDITION_FOR_RENOVATION
+
+  """
+  No interior finishing or floors dictionary value
+  """
+  PROPERTY_CONDITION_NO_INTERIOR_FINISHING_OR_FLOORS
+
+  """
+  For finishing dictionary value
+  """
+  PROPERTY_CONDITION_FOR_FINISHING
+
+  """
+  High standard dictionary value
+  """
+  PROPERTY_CONDITION_HIGH_STANDARD
+
+  """
+  Shed dictionary value
+  """
+  GARAGE_CONSTRUCTION_SHED
+
+  """
+  Tin dictionary value
+  """
+  GARAGE_CONSTRUCTION_TIN
+
+  """
+  Wooden dictionary value
+  """
+  GARAGE_CONSTRUCTION_WOODEN
+
+  """
+  Brick dictionary value
+  """
+  GARAGE_CONSTRUCTION_BRICK
+
+  """
+  Place in hall dictionary value
+  """
+  GARAGE_CONSTRUCTION_PLACE_IN_HALL
+
+  """
+  Parking spot dictionary value
+  """
+  GARAGE_LOCATION_PARKING_SPOT
+
+  """
+  Car park dictionary value
+  """
+  GARAGE_LOCATION_CAR_PARK
+
+  """
+  Garage dictionary value
+  """
+  GARAGE_LOCATION_GARAGE
+}
+
+"""
+Dictionary type
+"""
+enum DictionaryType {
+  """
+  Gas dictionary type
+  """
+  GAS
+
+  """
+  Building material dictionary type
+  """
+  BUILDING_MATERIAL
+
+  """
+  House type dictionary type
+  """
+  HOUSE_TYPE
+
+  """
+  Building condition dictionary type
+  """
+  BUILDING_CONDITION
+
+  """
+  Parking places dictionary type
+  """
+  PARKING_PLACES
+
+  """
+  Heating dictionary type
+  """
+  HEATING
+
+  """
+  Internet type dictionary type
+  """
+  INTERNET_TYPE
+
+  """
+  Kitchen type dictionary type
+  """
+  KITCHEN_TYPE
+
+  """
+  Plot type dictionary type
+  """
+  PLOT_TYPE
+
+  """
+  Ownership form dictionary type
+  """
+  OWNERSHIP_FORM
+
+  """
+  Access road dictionary type
+  """
+  ACCESS_ROAD
+
+  """
+  Sewerage dictionary type
+  """
+  SEWERAGE
+
+  """
+  Fence dictionary type
+  """
+  FENCE
+
+  """
+  Building type dictionary type
+  """
+  BUILDING_TYPE
+
+  """
+  Roof type dictionary type
+  """
+  ROOF_TYPE
+
+  """
+  Property condition dictionary type
+  """
+  PROPERTY_CONDITION
+
+  """
+  Garage construction dictionary type
+  """
+  GARAGE_CONSTRUCTION
+
+  """
+  Garage location dictionary type
+  """
+  GARAGE_LOCATION
+}
+
+"""
+Object for input of property search filters
+"""
+input PropertySearchFiltersInput {
+  """
+  Apply filter to property type
+  """
+  type: [PropertyType]
+
+  """
+  Apply filter to property transaction
+  """
+  transaction: PropertyTransaction
+
+  """
+  A list of location to search properties in
+  """
+  locations: [String!]
+
+  """
+  Filters on location
+  """
+  location: LocationSearchParametersInput
+
+  """
+  Apply filter to area. Larger or equal to given value
+  """
+  areaFrom: String
+
+  """
+  Apply filter to area. Lower or equal to given value
+  """
+  areaTo: String
+
+  """
+  Apply filter to plot area. Larger or equal to given value
+  """
+  plotAreaFrom: String
+
+  """
+  Apply filter to plot area. Lower or equal to given value
+  """
+  plotAreaTo: String
+
+  """
+  Apply filter to unified price (in PLN). Larger or equal to given value
+  """
+  priceFrom: String
+
+  """
+  Apply filter to unified price (in PLN). Lower or equal to given value
+  """
+  priceTo: String
+
+  """
+  Apply filter to unified price (in PLN) per square meter. Larger or equal to given value
+  """
+  priceM2From: String
+
+  """
+  Apply filter to unified price (in PLN) per square meter. Lower or equal to given value
+  """
+  priceM2To: String
+
+  """
+  Apply filter to floor number. Larger or equal to given value
+  """
+  floorFrom: Int
+
+  """
+  Apply filter to floor number. Lower or equal to given value
+  """
+  floorTo: Int
+
+  """
+  Apply filter to number of floors. Larger or equal to given value
+  """
+  numberOfFloorsFrom: Int
+
+  """
+  Apply filter to number of floors. Lower or equal to given value
+  """
+  numberOfFloorsTo: Int
+
+  """
+  Apply filter to number of rooms. Larger or equal to given value
+  """
+  numberOfRoomsFrom: Int
+
+  """
+  Apply filter to number of rooms. Lower or equal to given value
+  """
+  numberOfRoomsTo: Int
+
+  """
+  Apply filter to number of rooms. Equal to any of given values
+  """
+  numberOfRooms: [Int!]
+
+  """
+  Apply filter to description content of this property
+  """
+  description: String
+
+  """
+  Apply filter to build year. Larger or equal to given value
+  """
+  buildYearFrom: Int
+
+  """
+  Apply filter to build year. Lower or equal to given value
+  """
+  buildYearTo: Int
+
+  """
+  Apply filter on property attributes
+  """
+  attributes: PropertySearchAttributesFiltersInput
+
+  """
+  Apply filter on up-to-date field. Larger or equal to given value (available formats: `U`, `Y-m-d H:i:s`, `Y-m-d H:i`, `Y-m-d`, `Y-m-d H:i:sO`, `Y-m-d H:iO`, `Y-m-dO`)
+  """
+  dateFrom: String
+
+  """
+  Apply filter on up-to-date field. Lower or equal to given value (available formats: `U`, `Y-m-d H:i:s`, `Y-m-d H:i`, `Y-m-d`, `Y-m-d H:i:sO`, `Y-m-d H:iO`, `Y-m-dO`)
+  """
+  dateTo: String
+
+  """
+  Apply filter on addedAt field. Larger or equal to given value (available formats: `U`, `Y-m-d H:i:s`, `Y-m-d H:i`, `Y-m-d`, `Y-m-d H:i:sO`, `Y-m-d H:iO`, `Y-m-dO`)
+  """
+  addedAtFrom: String
+
+  """
+  Apply filter on addedAt field. Lower or equal to given value (available formats: `U`, `Y-m-d H:i:s`, `Y-m-d H:i`, `Y-m-d`, `Y-m-d H:i:sO`, `Y-m-d H:iO`, `Y-m-dO`)
+  """
+  addedAtTo: String
+
+  """
+  Market which the property belongs to
+  """
+  marketType: [MarketType!]
+
+  """
+  Type of property owner
+  """
+  ownerType: [OwnerType!]
+
+  """
+  Apply filter to development ID
+  """
+  developmentId: [Int]
+
+  """
+  Apply filter on dictionary values of property
+  """
+  dictionaries: [[DictionaryId!]]
+
+  """
+  Filter properties that have at least one photo
+  """
+  withPhoto: Boolean
+
+  """
+  Filter properties with price defined
+  """
+  withPrice: Boolean
+
+  """
+  Filter properties that have 3D visualisation
+  """
+  with3dView: Boolean
+
+  """
+  Filter properties that have discounted price
+  """
+  withDiscount: Boolean
+
+  """
+  Filter top promoted properties
+  """
+  withTopPromoted: Boolean
+
+  """
+  Filter flats which has more than one level
+  """
+  multiLevelApartment: Boolean
+
+  """
+  Filter properties that are on the last floor
+  """
+  lastFloor: Boolean
+
+  """
+  Filter by internal property number given by company
+  """
+  reference: String
+}
+
+"""
+Object for input of location search parameters
+"""
+input LocationSearchParametersInput {
+  """
+  Search on map
+  """
+  onMap: Boolean
+
+  """
+  Radius of the search area
+  """
+  radius: Int
+
+  """
+  Search the premises around the given location
+  """
+  around: Boolean
+
+  """
+  Map bounds of the search area
+  """
+  mapBounds: MapBoundsInput
+}
+
+"""
+Coordinates input of the corners for the map area
+"""
+input MapBoundsInput {
+  """
+  Coordinate input of the upper-right corner
+  """
+  northeast: CoordinateInput!
+
+  """
+  Coordinate input of lower-left corner
+  """
+  southwest: CoordinateInput!
+}
+
+"""
+Map coordinates input
+"""
+input CoordinateInput {
+  """
+  Latitude value of the map coordinate
+  """
+  latitude: Float!
+
+  """
+  Longitude value of the map coordinate
+  """
+  longitude: Float!
+}
+
+"""
+Object for input of property search attributes filters
+"""
+input PropertySearchAttributesFiltersInput {
+  """
+  Should property be discounted?
+  """
+  discount: Boolean
+
+  """
+  Should property be a part of closed complex?
+  """
+  closedComplex: Boolean
+
+  """
+  Should kitchen be furnished?
+  """
+  kitchenIsFurnished: Boolean
+
+  """
+  Should property have an attic?
+  """
+  attic: Boolean
+
+  """
+  Should property have any kind of balcony/terrace?
+  """
+  balcony: Boolean
+
+  """
+  Should property have a basement?
+  """
+  basement: Boolean
+
+  """
+  Should property have a shop display window?
+  """
+  displayWindow: Boolean
+
+  """
+  Should property have electricity?
+  """
+  electricity: Boolean
+
+  """
+  Should there be an elevator in the building?
+  """
+  elevator: Boolean
+
+  """
+  Should property have a fireplace?
+  """
+  fireplace: Boolean
+
+  """
+  Should property be furnished?
+  """
+  furniture: Boolean
+
+  """
+  Should property have gas?
+  """
+  gas: Boolean
+
+  """
+  Should property have an intercom?
+  """
+  intercom: Boolean
+
+  """
+  Should property have an internet connection?
+  """
+  internet: Boolean
+
+  """
+  Should property have access to sewerage system; and does not have a cesspit?
+  """
+  nonCesspitSewerage: Boolean
+
+  """
+  Should property have a phone?
+  """
+  phone: Boolean
+
+  """
+  Should property have a ramp to access property?
+  """
+  ramp: Boolean
+
+  """
+  Should property have a server room?
+  """
+  serverRoom: Boolean
+
+  """
+  Should property have a social room?
+  """
+  socialRoom: Boolean
+
+  """
+  Should property have a three phase electric power?
+  """
+  threePhasePower: Boolean
+
+  """
+  Should property have access to drinking water?
+  """
+  water: Boolean
+
+  """
+  Should property have a heating?
+  """
+  heating: Boolean
+
+  """
+  Should property have a severage?
+  """
+  sewerage: Boolean
+
+  """
+  Should property have gas oven?
+  """
+  gasOven: Boolean
+
+  """
+  Should property have a terrace?
+  """
+  terrace: Boolean
+
+  """
+  Should buyer be released from paying commission?
+  """
+  noCommission: Boolean
+
+  """
+  Should property have a swimming pool?
+  """
+  swimmingPool: Boolean
+
+  """
+  Should property have a fridge?
+  """
+  fridge: Boolean
+
+  """
+  Should property have a washing machine?
+  """
+  washingMachine: Boolean
+
+  """
+  Should property have a tv set?
+  """
+  tvSet: Boolean
+
+  """
+  Should property have a reception?
+  """
+  reception: Boolean
+
+  """
+  Should property have an air conditioning?
+  """
+  ac: Boolean
+
+  """
+  Should property have a docks?
+  """
+  docks: Boolean
+
+  """
+  Should property have a garden?
+  """
+  garden: Boolean
+
+  """
+  Should property have a loggia?
+  """
+  loggia: Boolean
+
+  """
+  Should property have a styled garden?
+  """
+  gardenIsStyled: Boolean
+
+  """
+  Should good price for property?
+  """
+  goodPrice: Boolean
+
+  """
+  Does property have any associated POIs?
+  """
+  pois: Boolean
+
+  """
+  Does property have any parking places?
+  """
+  parkingPlaces: Boolean
+}
+
+"""
+Property owner type
+"""
+enum OwnerType {
+  """
+  Agency property owner type
+  """
+  AGENCY
+
+  """
+  Developer property owner type
+  """
+  DEVELOPER
+
+  """
+  Private property owner type
+  """
+  PRIVATE
+
+  """
+  Company property owner type
+  """
+  COMPANY
+
+  """
+  Commune property owner type
+  """
+  COMMUNE
+}
+
+"""
+Input object holding information on how to sort search results
+"""
+input PropertySearchOrder {
+  sortKey: PropertySearchSortKey
+  sortOrder: SortOrder
+
+  """
+  If given, property with this id will be returned on first position.
+  """
+  firstPropertyId: String
+}
+
+"""
+Property search order sort key
+"""
+enum PropertySearchSortKey {
+  """
+  Order properties by rank. Choose this for default order
+  """
+  RANK
+
+  """
+  Order properties by price
+  """
+  PRICE
+
+  """
+  Order properties by price per square meter
+  """
+  PRICE_M2
+
+  """
+  Order properties by living area
+  """
+  AREA
+
+  """
+  Order properties by their topicality
+  """
+  DATE
+
+  """
+  Order properties by addedAt date
+  """
+  ADDED_AT
+
+  """
+  Order properties by reference
+  """
+  REFERENCE
+
+  """
+  Order properties by number of rooms
+  """
+  NUMBER_OF_ROOMS
+
+  """
+  Floor property search order sort key
+  """
+  FLOOR
+}
+
+"""
+Search order sorting direction
+"""
+enum SortOrder {
+  """
+  Ascending order
+  """
+  ASC
+
+  """
+  Descending order
+  """
+  DESC
+}
+
+"""
+Set with property search results
+"""
+type PropertySearchResult {
+  """
+  List of property objects
+  """
+  nodes: [Property]
+
+  """
+  Number of all properties found in current search
+  """
+  totalCount: Int
+
+  """
+  Average price per square meter for current search
+  """
+  averagePriceM2: Price
+
+  """
+  A Location object decoded from the nodes
+  """
+  location: Location
+}
