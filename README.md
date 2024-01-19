@@ -16,10 +16,7 @@ Set up your project using your preferred package manager. Use the corresponding 
 
 | Package Manager                                                | Command        |
 |---------------------------------------------------------------|----------------|
-| [yarn](https://yarnpkg.com/getting-started)                   | `yarn install` |
 | [npm](https://docs.npmjs.com/cli/v7/commands/npm-install)     | `npm install`  |
-| [pnpm](https://pnpm.io/installation)                          | `pnpm install` |
-| [bun](https://bun.sh/#getting-started)                        | `bun install`  |
 
 After completing the installation, your environment is ready for Vuetify development.
 
@@ -44,7 +41,7 @@ This section covers how to start the development server and build your project f
 To start the development server with hot-reload, run the following command. The server will be accessible at [http://localhost:3000](http://localhost:3000):
 
 ```bash
-yarn dev
+npm run dev
 ```
 
 (Repeat for npm, pnpm, and bun with respective commands.)
@@ -54,7 +51,7 @@ yarn dev
 To build your project for production, use:
 
 ```bash
-yarn build
+npm run build
 ```
 
 (Repeat for npm, pnpm, and bun with respective commands.)
